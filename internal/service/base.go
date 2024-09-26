@@ -1,9 +1,8 @@
 package service
 
 import (
-	"JH_2024_MJJ/internal/dao"
+	"StuService-Go/internal/dao"
 	"context"
-
 	"gorm.io/gorm"
 )
 
@@ -12,6 +11,6 @@ var (
 	d   *dao.Dao
 )
 
-func ServiceInit(db *gorm.DB) {
+func Init(db *gorm.DB) {
 	d = dao.New(db)
 }

@@ -1,8 +1,8 @@
 package database
 
 import (
-	"JH_2024_MJJ/internal/global"
-	"JH_2024_MJJ/pkg/utils"
+	"StuService-Go/internal/global"
+	"StuService-Go/pkg/utils"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

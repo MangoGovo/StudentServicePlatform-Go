@@ -1,5 +1,5 @@
 mysql:
-  dbname: "jh_homework_mjj_db"
+  dbname: "StuServiceDB"
   host: "127.0.0.1"
   port: 3306
   user: root
