@@ -1,0 +1,11 @@
+mysql:
+  dbname: "jh_homework_mjj_db"
+  host: "127.0.0.1"
+  port: 3306
+  user: root
+  pass: 262626mjj
+admin:
+  registerPwd: "aV9sb3ZlX3pqdXRfYW5kX2po" #base64 encrypted
+userType:
+  student: 1
+  admin: 2
