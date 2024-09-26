@@ -4,6 +4,8 @@ mysql:
   port: 3306
   user: root
   pass: 262626mjj
+file:
+  imagePath: "/upload/image"
 admin:
   registerPwd: "aV9sb3ZlX3pqdXRfYW5kX2po" #base64 encrypted
 userType:

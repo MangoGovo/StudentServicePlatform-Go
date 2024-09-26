@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"JH_2024_MJJ/pkg/utils"
+	"StuService-Go/pkg/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
