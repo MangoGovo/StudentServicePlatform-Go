@@ -6,6 +6,7 @@ mysql:
   pass: 262626mjj
 file:
   imagePath: "/upload/image"
+  imageExtension: [".jpg", ".jpeg", ".png"]
 admin:
   registerPwd: "aV9sb3ZlX3pqdXRfYW5kX2po" #base64 encrypted
 userType:

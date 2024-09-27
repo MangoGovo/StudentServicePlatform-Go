@@ -12,6 +12,7 @@ func Init(r *gin.Engine) {
 		uploadGroup := api.Group("/upload")
 		{
 			uploadGroup.POST("/picture", handler.UploadPicture)
+			uploadGroup.POST("/multi_picture", handler.UploadMultiPicture)
 		}
 		userGroup := api.Group("/user")
 		{

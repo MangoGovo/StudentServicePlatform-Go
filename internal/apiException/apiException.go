@@ -13,6 +13,7 @@ var (
 	UserExistedError = NewError(http.StatusInternalServerError, 200501, "用户已经存在")
 	FileExistedError = NewError(http.StatusInternalServerError, 200502, "文件已经存在")
 	ParamError       = NewError(http.StatusInternalServerError, 200503, "参数错误")
+	FileTypeError    = NewError(http.StatusInternalServerError, 200504, "文件类型错误")
 )
 
 func OtherError(message string) *Error {
