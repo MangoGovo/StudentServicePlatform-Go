@@ -20,6 +20,7 @@ func main() {
 	r.Use(middleware.ErrHandler())
 	r.NoMethod(middleware.HandleNotFond)
 	r.NoRoute(middleware.HandleNotFond)
+	r.Static("/static", "./static")
 	router.Init(r)
 	err := r.Run()
 	if err != nil {

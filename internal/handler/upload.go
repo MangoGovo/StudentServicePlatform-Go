@@ -6,6 +6,7 @@ import (
 	"StuService-Go/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
 )
 
 func isImageFile(filename string) bool {
@@ -24,17 +25,14 @@ func UploadPicture(c *gin.Context) {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 		return
 	}
-
 	// 保存图片
 	picType := utils.GetFileType(file.Filename)
-	if !isImageFile(picType) {
-		_ = c.AbortWithError(http.StatusOK, apiException.FileTypeError)
+	dst := global.Config.GetString("file.imagePath") + "/" + utils.GetUUID() + picType
+	if _, err := os.Stat(dst); err == nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.FileExistedError)
 		return
 	}
-
-	dst := global.Config.GetString("file.imagePath") + "/" + utils.GetUUID() + picType
-
-	if err := c.SaveUploadedFile(file, dst); err != nil {
+	if err := c.SaveUploadedFile(file, "."+dst); err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 		return
 	}
@@ -59,7 +57,12 @@ func UploadMultiPicture(c *gin.Context) {
 		}
 		dst := global.Config.GetString("file.imagePath") + "/" + utils.GetUUID() + picType
 
-		if err := c.SaveUploadedFile(file, dst); err != nil {
+		if _, err := os.Stat(dst); err == nil {
+			_ = c.AbortWithError(http.StatusOK, apiException.FileExistedError)
+			return
+		}
+
+		if err := c.SaveUploadedFile(file, "."+dst); err != nil {
 			_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 			return
 		}

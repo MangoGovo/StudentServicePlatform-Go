@@ -5,7 +5,7 @@ mysql:
   user: root
   pass: 262626mjj
 file:
-  imagePath: "/upload/image"
+  imagePath: "/static/image"
   imageExtension: [".jpg", ".jpeg", ".png"]
 admin:
   registerPwd: "aV9sb3ZlX3pqdXRfYW5kX2po" #base64 encrypted
