@@ -1,17 +1,17 @@
 mysql:
   dbname: "StuServiceDB"
   host: "127.0.0.1"
-  port: 3306
+  port:
   user: root
-  pass: 262626mjj
+  pass:
 file:
   imagePath: "/static/image"
   imageExtension: [".jpg", ".jpeg", ".png"]
 email:
   host: "smtp.qq.com"
   port: 25
-  userName: "1749100231@qq.com"
-  password: "edcgjqgxnttbdfff"
+  userName: ""
+  password: ""
 userType:
   student: 1
   admin: 2

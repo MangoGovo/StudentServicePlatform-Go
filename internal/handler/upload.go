@@ -19,7 +19,9 @@ func isImageFile(filename string) bool {
 	}
 	return false
 }
+
 func UploadPicture(c *gin.Context) {
+
 	file, err := c.FormFile("image")
 	if err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)

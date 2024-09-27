@@ -16,25 +16,25 @@ type RegisterData struct {
 }
 
 func Register(c *gin.Context) {
-	utils.JsonSuccess(c, nil)
-	return
 	var data RegisterData
+
 	if err := c.ShouldBindJSON(&data); err != nil {
-		utils.JsonFail(c, 200501, "参数错误，前端在干什么！乱传参数！")
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
 		return
 	}
-
-	_, err := service.GetUserByUserName(data.Username)
-	if err == nil {
+	email := data.Username
+	// 校验验证码
+	if !utils.IsValidEmail(email) {
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
+		return
+	}
+	if _, err := service.GetUserByUserName(data.Username); err == nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.UserExistedError)
 		return
 	}
-	//err = service.Register(&data)
-	//if err != nil {
-	//	_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
-	//	return
-	//
-	//}
-	//utils.JsonSuccess(c, nil)
-
+	verifyCode := utils.GenerateVerifyCode(6)
+	if err := service.SendVerifyCode(email, verifyCode); err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.SendVerifyCodeError)
+	}
+	return
 }

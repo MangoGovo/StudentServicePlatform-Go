@@ -1,7 +1,6 @@
 package service
 
 import (
-	"StuService-Go/internal/global"
 	"StuService-Go/internal/model"
 )
 
@@ -14,13 +13,6 @@ func GetUserByID(UserID int64) (*model.User, error) {
 }
 
 func Register(Username string, NickName string, Password string, UserType int, AdminPwd string) error {
-	/*
-		检查管理员密码
-	*/
-	if UserType == global.Config.GetInt("userType.admin") &&
-		AdminPwd != global.Config.GetString("admin.registerPwd") {
-
-	}
 
 	// 检查账号密码格式
 	// 1. 账号只能数字
