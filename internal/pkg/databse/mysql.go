@@ -8,8 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
 func Init() *gorm.DB {
 	user := global.Config.GetString("mysql.user")
 	pass := global.Config.GetString("mysql.pass")
@@ -31,7 +29,7 @@ func Init() *gorm.DB {
 
 	}
 
-	utils.Log.Println("数据库连接成功")
+	utils.Log.Println("mysql数据库连接成功")
 	return db
 
 }

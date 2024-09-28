@@ -9,10 +9,33 @@ import (
 )
 
 type RegisterData struct {
-	Username string `json:"username"`
-	Nickname string `json:"nickname"`  //昵称
-	Password string `json:"-"`         //密码
-	UserType int    `json:"user_type"` //用户类型
+	Username   string `json:"username"`
+	Nickname   string `json:"nickname"`  //昵称
+	Password   string `json:"-"`         //密码
+	UserType   int    `json:"user_type"` //用户类型
+	VerifyCode string `json:"verify_code"`
+}
+type SendCodeData struct {
+	Email string `json:"email"`
+}
+
+func SendCode(c *gin.Context) {
+	var data SendCodeData
+	if err := c.ShouldBindJSON(&data); err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
+		return
+	}
+	email := data.Email
+	if !utils.IsValidEmail(email) {
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
+		return
+	}
+	verifyCode := utils.GenerateVerifyCode(6)
+	if err := service.SendVerifyCode(email, verifyCode); err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.SendVerifyCodeError)
+		return
+	}
+	utils.JsonSuccess(c, nil)
 }
 
 func Register(c *gin.Context) {
@@ -23,18 +46,37 @@ func Register(c *gin.Context) {
 		return
 	}
 	email := data.Username
-	// 校验验证码
+
+	// 校验邮箱是否合法
 	if !utils.IsValidEmail(email) {
 		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
 		return
 	}
+
+	// 校验用户是否重复
 	if _, err := service.GetUserByUserName(data.Username); err == nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.UserExistedError)
 		return
 	}
-	verifyCode := utils.GenerateVerifyCode(6)
-	if err := service.SendVerifyCode(email, verifyCode); err != nil {
-		_ = c.AbortWithError(http.StatusOK, apiException.SendVerifyCodeError)
+
+	// 校验验证码
+	utils.Log.Println(email)
+	cachedVerifyCode, err := service.GetVerifyCode(email)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.VerifyCodeExpired)
+		return
 	}
-	return
+
+	if data.VerifyCode != cachedVerifyCode {
+		_ = c.AbortWithError(http.StatusOK, apiException.VerifyCodeError)
+		return
+	}
+
+	err = service.Register(data.Username, data.Nickname, data.Password, data.UserType)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusOK, err)
+		return
+	}
+
+	utils.JsonSuccess(c, nil)
 }

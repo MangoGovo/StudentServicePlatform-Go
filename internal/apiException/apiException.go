@@ -9,12 +9,15 @@ type Error struct {
 }
 
 var (
-	ServerError         = NewError(http.StatusInternalServerError, 200500, "系统异常，请稍后重试!")
-	UserExistedError    = NewError(http.StatusInternalServerError, 200501, "用户已经存在")
-	FileExistedError    = NewError(http.StatusInternalServerError, 200502, "文件已经存在")
-	ParamsError         = NewError(http.StatusInternalServerError, 200503, "参数错误")
-	FileTypeError       = NewError(http.StatusInternalServerError, 200504, "文件类型错误")
-	SendVerifyCodeError = NewError(http.StatusInternalServerError, 200505, "验证码发送失败")
+	ServerError           = NewError(http.StatusInternalServerError, 200500, "系统异常，请稍后重试!")
+	UserExistedError      = NewError(http.StatusInternalServerError, 200501, "用户已经存在")
+	FileExistedError      = NewError(http.StatusInternalServerError, 200502, "文件已经存在")
+	ParamsError           = NewError(http.StatusInternalServerError, 200503, "参数错误")
+	FileTypeError         = NewError(http.StatusInternalServerError, 200504, "文件类型错误")
+	SendVerifyCodeError   = NewError(http.StatusInternalServerError, 200505, "验证码发送失败")
+	PermissionsNotAllowed = NewError(http.StatusInternalServerError, 200506, "权限不足")
+	VerifyCodeError       = NewError(http.StatusInternalServerError, 200506, "验证码错误")
+	VerifyCodeExpired     = NewError(http.StatusInternalServerError, 200506, "验证码已过期，请重新发送")
 )
 
 func OtherError(message string) *Error {

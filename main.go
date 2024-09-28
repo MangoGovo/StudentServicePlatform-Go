@@ -14,6 +14,7 @@ import (
 func main() {
 	utils.InitLogger()
 	db := database.Init()
+	database.InitRedis()
 	service.Init(db)
 	r := gin.Default()
 	r.Use(cors.Default())

@@ -19,5 +19,5 @@ func InitLogger() {
 	//defer logFile.Close()
 	mw := io.MultiWriter(os.Stdout, logFile)
 	Log = log.New(mw, "", log.LstdFlags)
-	Log.Printf("%s", "123")
+	//Log.Printf("%s", "123")
 }

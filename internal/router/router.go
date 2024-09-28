@@ -17,6 +17,7 @@ func Init(r *gin.Engine) {
 		userGroup := api.Group("/user")
 		{
 			userGroup.POST("reg", handler.Register)
+			userGroup.POST("send_code", handler.SendCode)
 			//userGroup.POST("login", user.Login)
 		}
 	}

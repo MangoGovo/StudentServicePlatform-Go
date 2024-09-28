@@ -1,7 +1,10 @@
 package service
 
 import (
+	"StuService-Go/internal/apiException"
+	"StuService-Go/internal/dao"
 	"StuService-Go/internal/model"
+	"StuService-Go/pkg/utils"
 )
 
 func GetUserByUserName(username string) (*model.User, error) {
@@ -12,40 +15,33 @@ func GetUserByID(UserID int64) (*model.User, error) {
 	return d.GetUserByID(ctx, UserID)
 }
 
-func Register(Username string, NickName string, Password string, UserType int, AdminPwd string) error {
+func Register(Username string, NickName string, Password string, UserType int) error {
+	// 1. 检查邮箱格式
+	if !utils.IsValidEmail(Username) {
+		return apiException.ParamsError
+	}
 
-	// 检查账号密码格式
-	// 1. 账号只能数字
-	//for _, char := range Username {
-	//	if char < '0' || char > '9' {
-	//		utils.Log.Printf("%s注册请求不合法\n", Username)
-	//		return &invalidUsernameOrPasswordError{}
-	//	}
-	//}
-	//
-	//// 2. 密码(md5)32位，数字加小写字母
-	//if len(Password) != 32 {
-	//	utils.Log.Printf("%s注册请求不合法\n", Username)
-	//	return &invalidUsernameOrPasswordError{}
-	//}
-	//for _, char := range Password {
-	//	if !(char >= '0' && char <= '9' || char >= 'a' && char <= 'z') {
-	//		utils.Log.Printf("%s注册请求不合法\n", Username)
-	//		return &invalidUsernameOrPasswordError{}
-	//	}
-	//}
-	//
-	//// 3. 检查usertype
-	//if UserType != 1 && UserType != 2 {
-	//	utils.Log.Printf("%s注册请求不合法\n", Username)
-	//	return &invalidUserTypeError{}
-	//}
-	//utils.Log.Printf("%s注册成功，噢耶！\n", Username)
+	// 2. 检查密码强弱
+	// TODO 检查密码强弱
+
+	// 3. 将密码hash后添加到数据库
+	EncryptedPwd := utils.MD5(Password)
+
+	// 4. 检查usertype
+	if UserType != 0 {
+		return apiException.PermissionsNotAllowed
+	}
+
+	// 5. 从Redis删除验证码
+	if err := dao.RedisDelKeyVal(ctx, Username); err != nil {
+		utils.Log.Println(err.Error())
+		return apiException.ServerError
+	}
 
 	return d.CreateUser(ctx, &model.User{
 		Username: Username,
 		Nickname: NickName,
-		Password: Password,
+		Password: EncryptedPwd,
 		UserType: UserType,
 	})
 }
