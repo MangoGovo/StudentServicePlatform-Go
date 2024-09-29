@@ -16,8 +16,11 @@ var (
 	FileTypeError         = NewError(http.StatusInternalServerError, 200504, "文件类型错误")
 	SendVerifyCodeError   = NewError(http.StatusInternalServerError, 200505, "验证码发送失败")
 	PermissionsNotAllowed = NewError(http.StatusInternalServerError, 200506, "权限不足")
-	VerifyCodeError       = NewError(http.StatusInternalServerError, 200506, "验证码错误")
-	VerifyCodeExpired     = NewError(http.StatusInternalServerError, 200506, "验证码已过期，请重新发送")
+	VerifyCodeError       = NewError(http.StatusInternalServerError, 200507, "验证码错误")
+	VerifyCodeExpired     = NewError(http.StatusInternalServerError, 200508, "验证码已过期，请重新发送")
+	UserNotExistError     = NewError(http.StatusInternalServerError, 200509, "用户不存在")
+	PwdWrongError         = NewError(http.StatusInternalServerError, 200510, "密码错误")
+	AuthExpired           = NewError(http.StatusInternalServerError, 200511, "登陆状态已过期，请重新登陆")
 )
 
 func OtherError(message string) *Error {

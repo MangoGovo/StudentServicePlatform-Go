@@ -5,9 +5,9 @@ import (
 	"context"
 )
 
-func (d *Dao) GetUserByUserName(ctx context.Context, phone string) (*model.User, error) {
+func (d *Dao) GetUserByUserName(ctx context.Context, username string) (*model.User, error) {
 	var user model.User
-	err := d.orm.WithContext(ctx).Where("username=?", phone).First(&user).Error
+	err := d.orm.WithContext(ctx).Where("username=?", username).First(&user).Error
 	return &user, err
 }
 

@@ -8,23 +8,26 @@ import (
 	"StuService-Go/pkg/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 func main() {
 	utils.InitLogger()
+
 	db := database.Init()
 	database.InitRedis()
 	service.Init(db)
+
 	r := gin.Default()
 	r.Use(cors.Default())
+
 	r.Use(middleware.ErrHandler())
 	r.NoMethod(middleware.HandleNotFond)
 	r.NoRoute(middleware.HandleNotFond)
 	r.Static("/static", "./static")
 	router.Init(r)
+
 	err := r.Run()
 	if err != nil {
-		log.Fatal(err)
+		utils.Log.Fatal(err)
 	}
 }

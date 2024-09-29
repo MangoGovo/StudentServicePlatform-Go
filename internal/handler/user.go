@@ -2,19 +2,13 @@ package handler
 
 import (
 	"StuService-Go/internal/apiException"
+	"StuService-Go/internal/model"
 	"StuService-Go/internal/service"
 	"StuService-Go/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type RegisterData struct {
-	Username   string `json:"username"`
-	Nickname   string `json:"nickname"`  //昵称
-	Password   string `json:"-"`         //密码
-	UserType   int    `json:"user_type"` //用户类型
-	VerifyCode string `json:"verify_code"`
-}
 type SendCodeData struct {
 	Email string `json:"email"`
 }
@@ -36,6 +30,14 @@ func SendCode(c *gin.Context) {
 		return
 	}
 	utils.JsonSuccess(c, nil)
+}
+
+type RegisterData struct {
+	Username   string `json:"username"`
+	Nickname   string `json:"nickname"`  //昵称
+	Password   string `json:"password"`  //密码
+	UserType   int    `json:"user_type"` //用户类型
+	VerifyCode string `json:"verify_code"`
 }
 
 func Register(c *gin.Context) {
@@ -79,4 +81,54 @@ func Register(c *gin.Context) {
 	}
 
 	utils.JsonSuccess(c, nil)
+}
+
+type LoginData struct {
+	Username string `json:"username"`
+	Password string `json:"password"` // MD5 Encrypted
+}
+
+func Login(c *gin.Context) {
+	var data LoginData
+	if err := c.ShouldBindJSON(&data); err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
+		return
+	}
+
+	// 1. 判断密码是否为MD5加密
+	if !utils.CheckMD5(data.Password) {
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
+		return
+	}
+
+	// 2. 判断用户是否存在
+	user, err := service.GetUserByUserName(data.Username)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.UserNotExistError)
+		return
+	}
+
+	//	3. 密码校验
+	if user.Password != data.Password {
+		_ = c.AbortWithError(http.StatusOK, apiException.PwdWrongError)
+		return
+	}
+
+	// 4. 生成Token
+	token, err := utils.GenerateJWT(user.ID)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
+		return
+	}
+
+	// 5. 获取UserType
+	utils.JsonSuccess(c, gin.H{
+		"token":     token,
+		"user_type": user.UserType,
+	})
+}
+
+func GetUserInfo(c *gin.Context) {
+	user := c.MustGet("user").(*model.User)
+	utils.JsonSuccess(c, user)
 }
