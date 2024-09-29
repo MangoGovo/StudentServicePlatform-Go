@@ -132,3 +132,30 @@ func GetUserInfo(c *gin.Context) {
 	user := c.MustGet("user").(*model.User)
 	utils.JsonSuccess(c, user)
 }
+
+type editUserInfoData struct {
+	Nickname     string `json:"nickname"`
+	Gender       int    `json:"gender"`
+	Introduction string `json:"introduction"`
+}
+
+func EditUserInfo(c *gin.Context) {
+	var data editUserInfoData
+	if err := c.ShouldBindJSON(&data); err != nil {
+		utils.Log.Println("12313123123123")
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
+		return
+	}
+	user := c.MustGet("user").(*model.User)
+
+	if err := service.UpdateUser(&model.User{
+		ID:           user.ID,
+		Nickname:     data.Nickname,
+		Gender:       data.Gender,
+		Introduction: data.Introduction,
+	}); err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
+		return
+	}
+	utils.JsonSuccess(c, nil)
+}

@@ -26,6 +26,14 @@ func Init(r *gin.Engine) {
 			// 已登陆
 			userGroup.Use(middleware.IsLogin)
 			userGroup.GET("/info", handler.GetUserInfo)
+			userGroup.POST("/edit_info", handler.EditUserInfo)
 		}
+		stuGroup := api.Group("/student")
+		{
+			stuGroup.Use(middleware.IsLogin)
+
+		}
+		//adminGroup := api.Group("/admin"){}
+		//sudoGroup := api.Group("/sudo"){}
 	}
 }

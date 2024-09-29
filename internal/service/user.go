@@ -45,3 +45,7 @@ func Register(Username string, NickName string, Password string, UserType int) e
 		UserType: UserType,
 	})
 }
+
+func UpdateUser(user *model.User) error {
+	return d.UpdateUser(ctx, user)
+}

@@ -11,6 +11,3 @@ type Dao struct {
 func New(orm *gorm.DB) *Dao {
 	return &Dao{orm: orm}
 }
-
-type Daos interface {
-}

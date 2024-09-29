@@ -20,3 +20,7 @@ func (d *Dao) GetUserByID(ctx context.Context, ID int64) (*model.User, error) {
 func (d *Dao) CreateUser(ctx context.Context, user *model.User) error {
 	return d.orm.WithContext(ctx).Create(user).Error
 }
+
+func (d *Dao) UpdateUser(ctx context.Context, user *model.User) error {
+	return d.orm.WithContext(ctx).Save(user).Error
+}

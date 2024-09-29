@@ -1,7 +1,7 @@
 package model
 
 type User struct {
-	ID           int64  `json:"user_id"`
+	ID           int64  `json:"user_id" gorm:"primary_key"`
 	Username     string `json:"username"`
 	Nickname     string `json:"nickname"`                   //昵称
 	Password     string `json:"-"`                          //密码
