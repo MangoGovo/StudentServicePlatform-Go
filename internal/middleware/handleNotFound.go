@@ -8,5 +8,5 @@ import (
 )
 
 func HandleNotFond(c *gin.Context) {
-	utils.JsonResponse(c, 404, 200404, http.StatusText(http.StatusNotFound), nil)
+	utils.JsonResponse(c, http.StatusNotFound, 200404, http.StatusText(http.StatusNotFound), nil)
 }

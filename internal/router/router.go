@@ -31,6 +31,11 @@ func Init(r *gin.Engine) {
 		stuGroup := api.Group("/student")
 		{
 			stuGroup.Use(middleware.IsLogin)
+			stuGroup.POST("/feedback", handler.PostFeedback)
+			stuGroup.GET("/feedback", handler.QueryFeedback)
+			stuGroup.DELETE("/feedback", handler.DeleteFeedback)
+			stuGroup.PUT("/feedback", handler.UpdateFeedback)
+			stuGroup.GET("/feedback_list", handler.GetFeedbackList)
 
 		}
 		//adminGroup := api.Group("/admin"){}

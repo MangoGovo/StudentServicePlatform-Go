@@ -142,7 +142,6 @@ type editUserInfoData struct {
 func EditUserInfo(c *gin.Context) {
 	var data editUserInfoData
 	if err := c.ShouldBindJSON(&data); err != nil {
-		utils.Log.Println("12313123123123")
 		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
 		return
 	}

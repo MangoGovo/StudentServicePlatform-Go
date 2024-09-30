@@ -19,8 +19,8 @@ func main() {
 
 	r := gin.Default()
 	r.Use(cors.Default())
-
 	r.Use(middleware.ErrHandler())
+	r.Use(middleware.Security())
 	r.NoMethod(middleware.HandleNotFond)
 	r.NoRoute(middleware.HandleNotFond)
 	r.Static("/static", "./static")

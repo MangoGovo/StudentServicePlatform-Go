@@ -13,8 +13,12 @@ import (
 func IsLogin(c *gin.Context) {
 	// 1. 从请求头中获取token
 	tokenStr := c.Request.Header.Get("Authorization")
+	if len(tokenStr) <= 7 {
+		_ = c.AbortWithError(http.StatusOK, apiException.AuthExpired)
+		return
+	}
 	tokenStr = tokenStr[7:]
-	utils.Log.Println(tokenStr)
+	//utils.Log.Println(tokenStr)
 	// 2. 解析token
 	jwtUser, err := utils.ParseJwt(tokenStr)
 	if err != nil {

@@ -24,3 +24,7 @@ func (d *Dao) CreateUser(ctx context.Context, user *model.User) error {
 func (d *Dao) UpdateUser(ctx context.Context, user *model.User) error {
 	return d.orm.WithContext(ctx).Save(user).Error
 }
+
+func (d *Dao) DeleteUser(ctx context.Context, user *model.User) error {
+	return d.orm.WithContext(ctx).Delete(user).Error
+}
