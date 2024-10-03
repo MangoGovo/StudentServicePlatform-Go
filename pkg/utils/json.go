@@ -21,5 +21,5 @@ func ConvertJsonToStr(data interface{}) (string, error) {
 
 func ConvertStrToList(data string, model []interface{}) error {
 	dataBytes := []byte(data)
-	return json.Unmarshal(dataBytes, model)
+	return json.Unmarshal(dataBytes, &model)
 }

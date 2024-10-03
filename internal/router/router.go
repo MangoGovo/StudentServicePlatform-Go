@@ -36,7 +36,9 @@ func Init(r *gin.Engine) {
 			stuGroup.DELETE("/feedback", handler.DeleteFeedback)
 			stuGroup.PUT("/feedback", handler.UpdateFeedback)
 			stuGroup.GET("/feedback_list", handler.GetFeedbackList)
-
+			stuGroup.POST("/rate", handler.RateFeedback)
+			stuGroup.POST("/comment", handler.CommentFeedback)
+			stuGroup.DELETE("/comment", handler.DeleteComment)
 		}
 		//adminGroup := api.Group("/admin"){}
 		//sudoGroup := api.Group("/sudo"){}

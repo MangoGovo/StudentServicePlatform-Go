@@ -35,7 +35,7 @@ func IsLogin(c *gin.Context) {
 	// 4. 获取用户信息
 	user, err := service.GetUserByID(jwtUser.UserID)
 	if err != nil {
-		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
+		_ = c.AbortWithError(http.StatusOK, apiException.UserNotExistError)
 		return
 	}
 	c.Set("user", user)

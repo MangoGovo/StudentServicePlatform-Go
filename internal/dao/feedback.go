@@ -36,11 +36,3 @@ func (d *Dao) GetFeedbackCount(ctx context.Context, userID int64, status int) (i
 
 	return total, err
 }
-
-// Comment
-
-func (d *Dao) GetCommentByFeedbackID(ctx context.Context, feedbackID int64, receiverID int64) ([]model.Comment, error) {
-	var commentList []model.Comment
-	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("feedback_id = ? AND receiver_id = ?", feedbackID, receiverID).Find(&commentList).Error
-	return commentList, err
-}

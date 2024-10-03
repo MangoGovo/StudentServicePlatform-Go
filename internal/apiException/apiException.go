@@ -21,7 +21,9 @@ var (
 	UserNotExistError     = NewError(http.StatusInternalServerError, 200509, "用户不存在")
 	PwdWrongError         = NewError(http.StatusInternalServerError, 200510, "密码错误")
 	AuthExpired           = NewError(http.StatusInternalServerError, 200511, "登陆状态已过期，请重新登陆")
-	Phlin                 = NewError(http.StatusInternalServerError, 114514, "我猜你是彭海林")
+	FeedbackNotHandled    = NewError(http.StatusInternalServerError, 200512, "问题反馈仍未被处理,请待处理后再打分")
+
+	Phlin = NewError(http.StatusInternalServerError, 114514, "我猜你是彭海林")
 )
 
 func OtherError(message string) *Error {
