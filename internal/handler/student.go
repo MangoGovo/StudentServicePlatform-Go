@@ -401,11 +401,7 @@ func CommentFeedback(c *gin.Context) {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 		return
 	}
-	feedback.Status = 2
-	if err := service.UpdateFeedback(feedback); err != nil {
-		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
-		return
-	}
+
 	utils.JsonSuccess(c, nil)
 }
 
@@ -436,26 +432,6 @@ func DeleteComment(c *gin.Context) {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 		return
 	}
-	// 删除后判断是否还有留存的回复
-	feedback, err := service.GetFeedbackByID(data.FeedbackID)
-	if err != nil {
-		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
-		return
-	}
 
-	total, err := service.GetCommentCount(feedback.ID)
-	if err != nil {
-		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
-		return
-	}
-
-	if total == 0 {
-		// 恢复到接单但未回复
-		feedback.Status = 1
-		if err = service.UpdateFeedback(feedback); err != nil {
-			_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
-			return
-		}
-	}
 	utils.JsonSuccess(c, nil)
 }

@@ -18,5 +18,4 @@ func InitRedis() {
 		DB:       db,       // 使用默认DB
 	})
 	utils.Log.Println("Redis数据库连接成功")
-
 }

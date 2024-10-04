@@ -36,3 +36,17 @@ func (d *Dao) GetFeedbackCount(ctx context.Context, userID int64, status int) (i
 
 	return total, err
 }
+
+func (d *Dao) AdminGetFeedbackList(ctx context.Context, status int, capacity int, offset int) ([]model.Feedback, error) {
+	var feedbackList []model.Feedback
+	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("status = ?", status).Limit(capacity).Offset(offset).Find(&feedbackList).Error
+
+	return feedbackList, err
+}
+
+func (d *Dao) AdminGetFeedbackCount(ctx context.Context, status int) (int64, error) {
+	var total int64
+	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("status = ?", status).Count(&total).Error
+
+	return total, err
+}

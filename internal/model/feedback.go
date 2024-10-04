@@ -20,4 +20,5 @@ type Feedback struct {
 	IsEmergency     bool           `json:"is_emergency"`
 	IsAnonymous     bool           `json:"is_anonymous"`
 	Status          int            `json:"status" gorm:"default:0"` //0无人接单 1有管理员接单，暂未回复 2管理员已回复 3用户已评价(已解决)
+	IsRubbish       bool           `json:"is_rubbish"`
 }
