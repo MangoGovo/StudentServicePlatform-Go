@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 type postFeedbackData struct {
@@ -61,6 +62,10 @@ type respComment struct {
 }
 
 type respFeedbackData struct {
+	CreatedAt       time.Time     `json:"created_at"`
+	FeedbackBy      string        `json:"feedback_by"`
+	HandlerID       int64         `json:"handler_id"`
+	HandlerNickname string        `json:"handler_nickname"`
 	ID              int64         `json:"feedback_id"`
 	FeedbackTitle   string        `json:"feedback_title"`
 	FeedbackType    int           `json:"feedback_type"`
@@ -100,9 +105,29 @@ func QueryFeedback(c *gin.Context) {
 	feedbackReply := make([]respComment, len(commentList))
 
 	for index, comment := range commentList {
+		sender, err := service.GetUserByID(comment.SenderID)
+		if err != nil {
+			_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
+			return
+		}
 		feedbackReply[index] = respComment{
+			Nickname: sender.Nickname,
 			Comment:  comment,
-			Nickname: user.Nickname,
+		}
+	}
+	// 获取发帖人姓名
+	feedbackBy, err := service.GetUserByID(feedback.Sender)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
+		return
+	}
+	var handleBy *model.User
+	// 获取处理人姓名
+	if feedback.Handler != 0 {
+		handleBy, err = service.GetUserByID(feedback.Sender)
+		if err != nil {
+			_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
+			return
 		}
 	}
 
@@ -110,7 +135,10 @@ func QueryFeedback(c *gin.Context) {
 	var pictures []string
 	picturesBytes := []byte(feedback.Pictures)
 	_ = json.Unmarshal(picturesBytes, &pictures)
-	utils.JsonSuccess(c, &respFeedbackData{
+
+	respData := respFeedbackData{
+		CreatedAt:       feedback.CreatedAt,
+		FeedbackBy:      feedbackBy.Nickname,
 		ID:              feedback.ID,
 		FeedbackTitle:   feedback.FeedbackTitle,
 		FeedbackType:    feedback.FeedbackType,
@@ -121,7 +149,13 @@ func QueryFeedback(c *gin.Context) {
 		Pictures:        pictures,
 		IsEmergency:     feedback.IsEmergency,
 		IsAnonymous:     feedback.IsAnonymous,
-	})
+	}
+
+	if handleBy != nil {
+		respData.HandlerID = handleBy.ID
+		respData.HandlerNickname = handleBy.Nickname
+	}
+	utils.JsonSuccess(c, &respData)
 }
 
 type deleteFeedbackData struct {

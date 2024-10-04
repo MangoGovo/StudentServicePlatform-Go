@@ -55,6 +55,13 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// 校验密码长度
+	pwdLen := len(data.Password)
+	if pwdLen < 8 || pwdLen > 16 {
+		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
+		return
+	}
+
 	// 校验用户是否重复
 	if _, err := service.GetUserByUserName(data.Username); err == nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.UserExistedError)

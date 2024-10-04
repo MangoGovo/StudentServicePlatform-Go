@@ -7,7 +7,8 @@ import (
 
 type Feedback struct {
 	ID              int64          `json:"feedback_id"`
-	Sender          int64          `json:"sender"`
+	Sender          int64          `json:"sender_id"`
+	Handler         int64          `json:"handler_id"`
 	CreatedAt       time.Time      `json:"created_at"`
 	UpdatedAt       time.Time      `json:"updated_at"`
 	DeletedAt       gorm.DeletedAt `json:"-"`

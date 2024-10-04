@@ -33,6 +33,5 @@ func (d *Dao) GetCommentByID(ctx context.Context, ID int64) (*model.Comment, err
 func (d *Dao) GetCommentsCount(ctx context.Context, feedbackID int64) (int64, error) {
 	var total int64
 	err := d.orm.WithContext(ctx).Model(&model.Comment{}).Where("feedback_id = ?", feedbackID).Count(&total).Error
-
 	return total, err
 }
