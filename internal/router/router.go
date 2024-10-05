@@ -53,6 +53,17 @@ func Init(r *gin.Engine) {
 			adminGroup.GET("/feedback_list", handler.AdminGetFeedbackList)
 			adminGroup.GET("/feedback", handler.AdminQueryFeedback)
 		}
-		//sudoGroup := api.Group("/sudo"){}
+		sudoGroup := api.Group("/sudo")
+		{
+			adminGroup.Use(middleware.IsSU)
+			sudoGroup.GET("/stats", handler.GetStatistics)
+			sudoGroup.GET("/rubbish_list", handler.GetRubbishList)
+			sudoGroup.POST("/audit", handler.DealRub)
+			sudoGroup.GET("/users", handler.GetUserList)
+			sudoGroup.POST("/users", handler.NewUser)
+			sudoGroup.PUT("/users", handler.ChangeUser)
+			sudoGroup.DELETE("/users", handler.DelUser)
+
+		}
 	}
 }

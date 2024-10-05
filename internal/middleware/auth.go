@@ -54,3 +54,16 @@ func IsAdmin(c *gin.Context) {
 		return
 	}
 }
+
+func IsSU(c *gin.Context) {
+	IsLogin(c)
+	val, isExisted := c.Get("user")
+	if !isExisted {
+		return
+	}
+	user := val.(*model.User)
+	if user.UserType != 2 {
+		_ = c.AbortWithError(http.StatusOK, apiException.PermissionsNotAllowed)
+		return
+	}
+}
