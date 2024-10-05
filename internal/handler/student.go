@@ -65,6 +65,7 @@ type respFeedbackData struct {
 	CreatedAt       time.Time     `json:"created_at"`
 	FeedbackBy      string        `json:"feedback_by"`
 	HandlerID       int64         `json:"handler_id"`
+	SenderID        int64         `json:"sender_id"`
 	HandlerNickname string        `json:"handler_nickname"`
 	ID              int64         `json:"feedback_id"`
 	FeedbackTitle   string        `json:"feedback_title"`
@@ -140,6 +141,7 @@ func QueryFeedback(c *gin.Context) {
 		CreatedAt:       feedback.CreatedAt,
 		FeedbackBy:      feedbackBy.Nickname,
 		ID:              feedback.ID,
+		SenderID:        feedbackBy.ID,
 		FeedbackTitle:   feedback.FeedbackTitle,
 		FeedbackType:    feedback.FeedbackType,
 		FeedbackContent: feedback.FeedbackContent,
@@ -246,6 +248,7 @@ type getFeedbackListData struct {
 }
 
 type respFeedbackListData struct {
+	SenderID        int64  `json:"sender_id"`
 	CreatedAt       string `json:"created_at"`
 	FeedbackID      int64  `json:"feedback_id"`
 	FeedbackBy      string `json:"feedback_by"`
@@ -302,6 +305,7 @@ func GetFeedbackList(c *gin.Context) {
 			CreatedAt:       feedback.CreatedAt.Format("2006-01-02 15:04:05"),
 			FeedbackID:      feedback.ID,
 			FeedbackBy:      FeedbackBy.Nickname,
+			SenderID:        FeedbackBy.ID,
 			FeedbackTitle:   feedback.FeedbackTitle,
 			FeedbackType:    feedback.FeedbackType,
 			FeedbackRate:    feedback.FeedbackRate,

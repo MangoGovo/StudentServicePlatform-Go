@@ -88,18 +88,13 @@ func Rubbish(c *gin.Context) {
 		_ = c.AbortWithError(http.StatusOK, apiException.PermissionsNotAllowed)
 		return
 	}
-	feedback.IsRubbish = true
+	feedback.IsRubbish = 1
 	if err = service.UpdateFeedback(feedback); err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 		return
 	}
 
 	utils.JsonSuccess(c, nil)
-}
-
-type adminCommentFeedbackData struct {
-	FeedbackID int64  `json:"feedback_id"`
-	Content    string `json:"content"`
 }
 
 // AdminComment 管理员评论问题反馈
@@ -211,6 +206,7 @@ func AdminGetFeedbackList(c *gin.Context) {
 	for index, feedback := range feedbackList {
 		// 获取发帖者
 		FeedbackBy, err := service.GetUserByID(feedback.Sender)
+
 		if err != nil {
 			_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 			return
@@ -260,9 +256,9 @@ func AdminQueryFeedback(c *gin.Context) {
 
 	// 鉴权
 	// 小细节:先判断err是否为空,为空则由于短路机制,不去处理feedback,避免了feedback为空的情况
-	user := c.MustGet("user").(*model.User)
+	//user := c.MustGet("user").(*model.User)
 	feedback, err := service.GetFeedbackByID(data.ID)
-	if err != nil || (feedback.Sender != user.ID && feedback.Handler != user.ID) {
+	if err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.PermissionsNotAllowed)
 		return
 	}
@@ -279,8 +275,7 @@ func AdminQueryFeedback(c *gin.Context) {
 	for index, comment := range commentList {
 		sender, err := service.GetUserByID(comment.SenderID)
 		if err != nil {
-			_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
-			return
+			continue
 		}
 		feedbackReply[index] = respComment{
 			Nickname: sender.Nickname,
@@ -312,6 +307,7 @@ func AdminQueryFeedback(c *gin.Context) {
 		CreatedAt:       feedback.CreatedAt,
 		FeedbackBy:      feedbackBy.Nickname,
 		ID:              feedback.ID,
+		SenderID:        feedbackBy.ID,
 		FeedbackTitle:   feedback.FeedbackTitle,
 		FeedbackType:    feedback.FeedbackType,
 		FeedbackContent: feedback.FeedbackContent,

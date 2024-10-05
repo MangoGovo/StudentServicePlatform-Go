@@ -20,7 +20,7 @@ func ErrHandler() gin.HandlerFunc {
 					apiErr = e
 				}
 				utils.Log.Printf("[ip:%s]%s", c.ClientIP(), apiErr.Msg)
-				utils.JsonFail(c, apiErr.StatusCode, apiErr.Msg)
+				utils.JsonFail(c, apiErr.Code, apiErr.Msg)
 				return
 			}
 		}

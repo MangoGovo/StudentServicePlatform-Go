@@ -22,6 +22,7 @@ var (
 	PwdWrongError         = NewError(http.StatusInternalServerError, 200510, "密码错误")
 	AuthExpired           = NewError(http.StatusInternalServerError, 200511, "登陆状态已过期，请重新登陆")
 	FeedbackNotHandled    = NewError(http.StatusInternalServerError, 200512, "问题反馈仍未被处理,请待处理后再打分")
+	LimitExceeded         = NewError(http.StatusInternalServerError, 200513, "请求频率过快请稍后再试")
 
 	Phlin = NewError(http.StatusInternalServerError, 114514, "我猜你是彭海林")
 )
