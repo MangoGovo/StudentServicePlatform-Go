@@ -12,3 +12,12 @@ type User struct {
 	Introduction string         `json:"introduction"`               //简介
 	UserType     int            `json:"user_type" gorm:"default:0"` //用户类型
 }
+type StuStat struct {
+	Sent    int64 `json:"sent"`
+	Ignored int64 `json:"ignored"`
+}
+
+type AdminStat struct {
+	Handled int64   `json:"handled"`
+	Ratings []int64 `json:"ratings"`
+}

@@ -49,3 +49,11 @@ func Register(Username string, NickName string, Password string, UserType int) e
 func UpdateUser(user *model.User) error {
 	return d.UpdateUser(ctx, user)
 }
+
+func GetStuStat(userID int64) (model.StuStat, error) {
+	return d.GetStuStat(ctx, userID)
+}
+
+func GetAdminStat(userID int64) (model.AdminStat, error) {
+	return d.GetAdminStat(ctx, userID)
+}

@@ -137,7 +137,26 @@ func Login(c *gin.Context) {
 
 func GetUserInfo(c *gin.Context) {
 	user := c.MustGet("user").(*model.User)
-	utils.JsonSuccess(c, user)
+	stuStat, err := service.GetStuStat(user.ID)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
+		return
+	}
+	adminStat, err := service.GetAdminStat(user.ID)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
+		return
+	}
+	utils.JsonSuccess(c, gin.H{
+		"user_id":      user.ID,
+		"username":     user.Username,
+		"nickname":     user.Nickname,
+		"gender":       user.Gender,
+		"introduction": user.Introduction,
+		"user_type":    user.UserType,
+		"stu_stats":    stuStat,
+		"admin_stats":  adminStat,
+	})
 }
 
 type editUserInfoData struct {

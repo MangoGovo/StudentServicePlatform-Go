@@ -15,9 +15,9 @@ import (
 )
 
 type Amount struct {
-	FeedbackAmount int64 `json:"feedback_amount"`
-	UserAmount     int64 `json:"user_amount"`
-	RatingAmount   []int `json:"ratings"`
+	FeedbackAmount int64   `json:"feedback_amount"`
+	UserAmount     int64   `json:"user_amount"`
+	RatingAmount   []int64 `json:"ratings"`
 }
 
 func GetStatistics(c *gin.Context) {
@@ -37,7 +37,7 @@ func GetStatistics(c *gin.Context) {
 	ratingSum, err := service.CountRating()
 	if err != nil {
 		/* c.AbortWithError(http.StatusOK, apiException.ServerError) */
-		total.RatingAmount = []int{0, 0, 0, 0, 0}
+		total.RatingAmount = []int64{0, 0, 0, 0, 0}
 		c.JSON(http.StatusOK, gin.H{
 			"code": 200,
 			"data": total,

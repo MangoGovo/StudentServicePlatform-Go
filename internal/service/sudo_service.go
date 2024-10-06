@@ -13,7 +13,7 @@ func CountUser() (int64, error) {
 	return d.UserCount(ctx)
 }
 
-func CountRating() ([]int, error) {
+func CountRating() ([]int64, error) {
 	return d.RatingCount(ctx)
 }
 

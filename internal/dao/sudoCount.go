@@ -19,10 +19,17 @@ func (d *Dao) UserCount(ctx context.Context) (int64, error) {
 	return userAmount, err
 }
 
-func (d *Dao) RatingCount(ctx context.Context) ([]int, error) {
-	var ratingAmount [5]int
-	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("status = ?", 3).Select("FeedbackRate,count(*)").Group("FeedbackRate").Scan(&ratingAmount).Error
-	return []int{int(ratingAmount[0]), int(ratingAmount[1]), int(ratingAmount[2]), int(ratingAmount[3]), int(ratingAmount[4])}, err
+func (d *Dao) RatingCount(ctx context.Context) ([]int64, error) {
+	ratingList := []int64{0, 0, 0, 0, 0}
+	for i := 0; i < len(ratingList); i++ {
+		var rate int64
+		_ = d.orm.WithContext(ctx).
+			Model(&model.Feedback{}).
+			Where("status = 3").
+			Where("feedback_rate = ?", i+1).Count(&rate).Error
+		ratingList[i] = rate
+	}
+	return ratingList, nil
 }
 
 func (d *Dao) GetUserList(ctx context.Context, UserType, PageCapacity, Offset int) ([]model.UserShow, error) {
