@@ -156,9 +156,12 @@ func EditUserInfo(c *gin.Context) {
 
 	if err := service.UpdateUser(&model.User{
 		ID:           user.ID,
+		Username:     user.Username,
 		Nickname:     data.Nickname,
+		Password:     user.Password,
 		Gender:       data.Gender,
 		Introduction: data.Introduction,
+		UserType:     user.UserType,
 	}); err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.ParamsError)
 		return

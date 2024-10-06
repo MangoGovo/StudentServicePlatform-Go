@@ -2,7 +2,9 @@ package middleware
 
 import (
 	"StuService-Go/internal/apiException"
+	"StuService-Go/internal/global"
 	"StuService-Go/pkg/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/ulule/limiter/v3"
 	mgin "github.com/ulule/limiter/v3/drivers/middleware/gin"
@@ -19,8 +21,10 @@ type Middleware struct {
 }
 
 func Limit() gin.HandlerFunc {
+	limitPerSec := global.Config.GetInt("Security.LimitPerSec")
 	// 限制访问频率
-	rate, err := limiter.NewRateFromFormatted("2-S")
+	fmtStr := fmt.Sprintf("%d-S", limitPerSec)
+	rate, err := limiter.NewRateFromFormatted(fmtStr)
 	store := memory.NewStore()
 	if err != nil {
 		utils.Log.Fatal(err)

@@ -14,6 +14,14 @@ func (d *Dao) GetUserByUserName(ctx context.Context, username string) (*model.Us
 func (d *Dao) GetUserByID(ctx context.Context, ID int64) (*model.User, error) {
 	var user model.User
 	err := d.orm.WithContext(ctx).Where("id=?", ID).First(&user).Error
+	if err != nil {
+		return &model.User{
+			ID:       0,
+			Username: "用户已注销",
+			Nickname: "用户已注销",
+			UserType: 0,
+		}, nil
+	}
 	return &user, err
 }
 

@@ -21,8 +21,8 @@ func main() {
 	r.ForwardedByClientIP = true
 	r.Use(cors.Default())
 	r.Use(middleware.ErrHandler())
-	//r.Use(middleware.Limit())
-	//r.Use(middleware.Security())
+	r.Use(middleware.Limit())
+	r.Use(middleware.Security())
 	r.NoMethod(middleware.HandleNotFond)
 	r.NoRoute(middleware.HandleNotFond)
 	r.Static("/static", "./static")

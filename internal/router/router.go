@@ -55,7 +55,7 @@ func Init(r *gin.Engine) {
 		}
 		sudoGroup := api.Group("/sudo")
 		{
-			adminGroup.Use(middleware.IsSU)
+			sudoGroup.Use(middleware.IsSU)
 			sudoGroup.GET("/stats", handler.GetStatistics)
 			sudoGroup.GET("/rubbish_list", handler.GetRubbishList)
 			sudoGroup.POST("/audit", handler.DealRub)

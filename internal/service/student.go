@@ -27,8 +27,8 @@ func GetFeedbackList(userID int64, status int, capacity int, offset int) ([]mode
 	return d.GetFeedbackList(ctx, userID, status, capacity, offset)
 }
 
-func GetFeedbackCount(userID int64, status int) (int64, error) {
-	return d.GetFeedbackCount(ctx, userID, status)
+func GetFeedbackCount(userID int64) (int64, error) {
+	return d.GetFeedbackCount(ctx, userID)
 }
 
 func GetCommentsByFeedbackID(feedbackID int64) ([]model.Comment, error) {

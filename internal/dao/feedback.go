@@ -35,9 +35,9 @@ func (d *Dao) GetFeedbackList(ctx context.Context, userID int64, status int, cap
 	return feedbackList, err
 }
 
-func (d *Dao) GetFeedbackCount(ctx context.Context, userID int64, status int) (int64, error) {
+func (d *Dao) GetFeedbackCount(ctx context.Context, userID int64) (int64, error) {
 	var total int64
-	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("sender = ? AND status = ?", userID, status).Count(&total).Error
+	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("sender = ?", userID).Count(&total).Error
 
 	return total, err
 }
@@ -52,9 +52,13 @@ func (d *Dao) AdminGetFeedbackList(ctx context.Context, status int, capacity int
 	return feedbackList, err
 }
 
-func (d *Dao) AdminGetFeedbackCount(ctx context.Context, status int) (int64, error) {
+func (d *Dao) AdminGetFeedbackCount(ctx context.Context, status int) (int, error) {
 	var total int64
-	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("status = ?", status).Count(&total).Error
+	if status == -1 {
+		err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Count(&total).Error
+		return int(total), err
 
-	return total, err
+	}
+	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("status = ?", status).Count(&total).Error
+	return int(total), err
 }

@@ -59,6 +59,7 @@ type queryFeedbackData struct {
 type respComment struct {
 	model.Comment
 	Nickname string `json:"nickname"`
+	UserType int    `json:"user_type"`
 }
 
 type respFeedbackData struct {
@@ -114,6 +115,7 @@ func QueryFeedback(c *gin.Context) {
 		feedbackReply[index] = respComment{
 			Nickname: sender.Nickname,
 			Comment:  comment,
+			UserType: sender.UserType,
 		}
 	}
 	// 获取发帖人姓名
@@ -301,6 +303,11 @@ func GetFeedbackList(c *gin.Context) {
 			feedbackPreview = content
 		}
 
+		if feedback.IsAnonymous {
+			FeedbackBy.Nickname = "匿名用户,你猜猜是谁"
+			FeedbackBy.ID = -1
+		}
+
 		respFeedbackList[index] = respFeedbackListData{
 			CreatedAt:       feedback.CreatedAt.Format("2006-01-02 15:04:05"),
 			FeedbackID:      feedback.ID,
@@ -313,9 +320,10 @@ func GetFeedbackList(c *gin.Context) {
 			FeedbackPreview: feedbackPreview,
 			Status:          feedback.Status,
 		}
+
 	}
 
-	total, err := service.GetFeedbackCount(user.ID, data.Status)
+	total, err := service.GetFeedbackCount(user.ID)
 
 	if err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)

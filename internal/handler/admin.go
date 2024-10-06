@@ -192,7 +192,7 @@ func AdminGetFeedbackList(c *gin.Context) {
 		return
 	}
 
-	user := c.MustGet("user").(*model.User)
+	//user := c.MustGet("user").(*model.User)
 
 	// 获取问题反馈列表列表
 	feedbackList, err := service.AdminGetFeedbackList(data.Status, data.PageCapacity, data.Offset)
@@ -208,8 +208,7 @@ func AdminGetFeedbackList(c *gin.Context) {
 		FeedbackBy, err := service.GetUserByID(feedback.Sender)
 
 		if err != nil {
-			_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
-			return
+			continue
 		}
 
 		// 截取帖子内容
@@ -235,7 +234,7 @@ func AdminGetFeedbackList(c *gin.Context) {
 		}
 	}
 
-	total, err := service.GetFeedbackCount(user.ID, data.Status)
+	total, err := service.AdminGetFeedbackCount(data.Status)
 
 	if err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
@@ -279,6 +278,7 @@ func AdminQueryFeedback(c *gin.Context) {
 		}
 		feedbackReply[index] = respComment{
 			Nickname: sender.Nickname,
+			UserType: sender.UserType,
 			Comment:  comment,
 		}
 	}
@@ -291,7 +291,7 @@ func AdminQueryFeedback(c *gin.Context) {
 	var handleBy *model.User
 	// 获取处理人姓名
 	if feedback.Handler != 0 {
-		handleBy, err = service.GetUserByID(feedback.Sender)
+		handleBy, err = service.GetUserByID(feedback.Handler)
 		if err != nil {
 			_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 			return
