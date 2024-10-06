@@ -89,6 +89,8 @@ func Rubbish(c *gin.Context) {
 		return
 	}
 	feedback.IsRubbish = 1
+	user := c.MustGet("user").(*model.User)
+	feedback.ReportedBy = user.Nickname
 	if err = service.UpdateFeedback(feedback); err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 		return
@@ -287,6 +289,10 @@ func AdminQueryFeedback(c *gin.Context) {
 	if err != nil {
 		_ = c.AbortWithError(http.StatusOK, apiException.ServerError)
 		return
+	}
+	if feedback.IsAnonymous {
+		feedbackBy.Nickname = "匿名用户,告诉你是谁"
+		feedbackBy.ID = -1
 	}
 	var handleBy *model.User
 	// 获取处理人姓名

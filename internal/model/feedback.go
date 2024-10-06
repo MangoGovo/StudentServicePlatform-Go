@@ -21,4 +21,5 @@ type Feedback struct {
 	IsAnonymous     bool           `json:"is_anonymous"`
 	Status          int            `json:"status" gorm:"default:0"`     //0无人接单 1有管理员接单，暂未回复 2管理员已回复 3用户已评价(已解决)
 	IsRubbish       int            `json:"is_rubbish" gorm:"default:0"` //0 未被标记为垃圾 1 标记未处理 2 审核为垃圾
+	ReportedBy      string         `json:"reported_by"`
 }

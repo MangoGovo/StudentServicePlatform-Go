@@ -26,11 +26,17 @@ func (d *Dao) GetFeedbackByID(ctx context.Context, ID int64) (*model.Feedback, e
 func (d *Dao) GetFeedbackList(ctx context.Context, userID int64, status int, capacity int, offset int) ([]model.Feedback, error) {
 	var feedbackList []model.Feedback
 	if status == -1 {
-		err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("sender = ?", userID).Limit(capacity).Offset(offset).Find(&feedbackList).Error
+		err := d.orm.WithContext(ctx).
+			Model(&model.Feedback{}).
+			Where("sender = ?", userID).
+			Order("created_at desc").
+			Limit(capacity).
+			Offset(offset).
+			Find(&feedbackList).Error
 		return feedbackList, err
 	}
 
-	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("sender = ? AND status = ?", userID, status).Limit(capacity).Offset(offset).Find(&feedbackList).Error
+	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("sender = ? AND status = ?", userID, status).Order("created_at desc").Limit(capacity).Offset(offset).Find(&feedbackList).Error
 
 	return feedbackList, err
 }
@@ -45,10 +51,14 @@ func (d *Dao) GetFeedbackCount(ctx context.Context, userID int64) (int64, error)
 func (d *Dao) AdminGetFeedbackList(ctx context.Context, status int, capacity int, offset int) ([]model.Feedback, error) {
 	var feedbackList []model.Feedback
 	if status == -1 {
-		err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Limit(capacity).Offset(offset).Find(&feedbackList).Error
+		err := d.orm.WithContext(ctx).
+			Model(&model.Feedback{}).
+			Order("created_at desc").
+			Limit(capacity).Offset(offset).
+			Find(&feedbackList).Error
 		return feedbackList, err
 	}
-	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("status = ?", status).Limit(capacity).Offset(offset).Find(&feedbackList).Error
+	err := d.orm.WithContext(ctx).Model(&model.Feedback{}).Where("status = ?", status).Order("created_at desc").Limit(capacity).Offset(offset).Find(&feedbackList).Error
 	return feedbackList, err
 }
 
