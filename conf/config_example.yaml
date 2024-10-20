@@ -1,9 +1,13 @@
 mysql:
   dbname: "StuServiceDB"
-  host: "127.0.0.1"
+  host:
   port:
   user: root
   pass:
+redis:
+  host: "localhost:6379"
+  password: ""
+  DB: 0
 file:
   imagePath: "/static/image"
   imageExtension: [".jpg", ".jpeg", ".png"]
@@ -12,6 +16,12 @@ email:
   port: 25
   userName: ""
   password: ""
+  verifyCodeExpireMinute: 5
 userType:
   student: 1
   admin: 2
+JWT:
+  Secret: ""
+  ExpireHour: 2
+Security:
+  LimitPerSec: 4
